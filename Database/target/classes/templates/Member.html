@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Members</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="container">
+    <h2>All Members</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Contact Number</th>
+            <th>WhatsApp Number</th>
+            <th>Membership Number</th>
+            <th>Member Type</th>
+            <th>Living Place</th>
+            <th>Living Street</th>
+            <th>Gender</th>
+            <th>Status</th>
+            <th>Join Date</th>
+            <th>Role</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="member : ${members}">
+            <td th:text="${member.id}"></td>
+            <td th:text="${member.fullName}"></td>
+            <td th:text="${member.email}"></td>
+            <td th:text="${member.contactNumber}"></td>
+            <td th:text="${member.whatsappNumber}"></td>
+            <td th:text="${member.membershipNumber}"></td>
+            <td th:text="${member.memberType}"></td>
+            <td th:text="${member.livingPlace}"></td>
+            <td th:text="${member.livingStreet}"></td>
+            <td th:text="${member.gender}"></td>
+            <td th:text="${member.status}"></td>
+            <td th:text="${member.joinDate}"></td>
+            <td th:text="${member.role}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="/dashboard">Back to Dashboard</a>
+</div>
+</body>
+</html>

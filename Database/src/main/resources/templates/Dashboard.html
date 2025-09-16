@@ -1,0 +1,316 @@
+
+<!-- Dashboard Page (dashboard.html) -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Church Database - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .welcome-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .welcome-card h2 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .user-info {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .user-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #667eea;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            border-top: 4px solid #667eea;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .members-table {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+        }
+
+        .table-header h3 {
+            margin: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .role-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+
+        .role-elder { background: #dc3545; color: white; }
+        .role-secretary { background: #28a745; color: white; }
+        .role-shepherd { background: #ffc107; color: #212529; }
+        .role-member { background: #6c757d; color: white; }
+
+        .member-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .no-access {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-info {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            table {
+                font-size: 0.875rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-brand">Church Database</div>
+        <div class="nav-links">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="welcome-card">
+        <h2>Welcome, <span th:text="${member.fullName}"></span>!</h2>
+        <div class="user-info">
+            <img th:if="${member.passportPhotoPath}" th:src="@{${member.passportPhotoPath}}"
+                 alt="Profile Photo" class="user-photo">
+            <div th:unless="${member.passportPhotoPath}" class="user-photo"
+                 style="background: #ddd; display: flex; align-items: center; justify-content: center;">
+                📷
+            </div>
+            <div>
+                <p><strong>Role:</strong> <span th:text="${member.role}"></span></p>
+                <p><strong>Membership Number:</strong> <span th:text="${member.membershipNumber}"></span></p>
+                <p><strong>Member Type:</strong> <span th:text="${member.memberType}"></span></p>
+                <p><strong>Join Date:</strong> <span th:text="${#temporals.format(member.joinDate, 'dd/MM/yyyy')}"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number" th:text="${stats.totalMembers}">0</div>
+            <div class="stat-label">Total Members</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" th:text="${stats.localMembers}">0</div>
+            <div class="stat-label">Local Members</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" th:text="${stats.guests}">0</div>
+            <div class="stat-label">Guests</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" th:text="${stats.elders}">0</div>
+            <div class="stat-label">Elders</div>
+        </div>
+    </div>
+
+    <!-- Admin Section - Only visible to Elder, Church Secretary, or Shepherd -->
+    <div th:if="${member.hasAdminAccess()}" class="members-table">
+        <div class="table-header">
+            <h3>All Members Directory</h3>
+        </div>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                <tr>
+                    <th>Photo</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Role</th>
+                    <th>Member Type</th>
+                    <th>Location</th>
+                    <th>Join Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="m : ${allMembers}">
+                    <td>
+                        <img th:if="${m.passportPhotoPath}" th:src="@{${m.passportPhotoPath}}"
+                             alt="Photo" class="member-photo">
+                        <div th:unless="${m.passportPhotoPath}" class="member-photo"
+                             style="background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 0.75rem;">
+                            📷
+                        </div>
+                    </td>
+                    <td th:text="${m.fullName}"></td>
+                    <td th:text="${m.email}"></td>
+                    <td th:text="${m.contactNumber}"></td>
+                    <td>
+                                <span th:class="'role-badge role-' + ${#strings.toLowerCase(m.role)}"
+                                      th:text="${m.role}"></span>
+                    </td>
+                    <td th:text="${m.memberType}"></td>
+                    <td>
+                        <span th:text="${m.livingPlace}"></span>
+                        <span th:if="${m.livingStreet}" th:text="', ' + ${m.livingStreet}"></span>
+                    </td>
+                    <td th:text="${#temporals.format(m.joinDate, 'dd/MM/yyyy')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Regular Member View -->
+    <div th:unless="${member.hasAdminAccess()}" class="no-access">
+        <h3>Member Dashboard</h3>
+        <p>Welcome to the church database system. You can view your profile and church statistics above.</p>
+        <p>Contact an Elder, Church Secretary, or Shepherd for access to member directory.</p>
+    </div>
+</div>
+</body>
+</html>
